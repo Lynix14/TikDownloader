@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Media Downloader UI</title>
+  <style>
+    body { font-family: Arial, sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; background: #f4f4f9; margin: 0; }
+    .card { background: white; padding: 2rem; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); width: 90%; max-width: 400px; text-align: center; }
+    input { width: 90%; padding: 10px; margin: 10px 0; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box; }
+    button { padding: 10px 20px; background: #fe2c55; color: white; border: none; border-radius: 5px; cursor: pointer; font-weight: bold; width: 90%; }
+    button:hover { background: #e02648; }
+    #status { margin-top: 15px; font-size: 14px; color: #333; }
+  </style>
+</head>
+<body>
+
+<div class="card">
+  <h2>Media Downloader</h2>
+  <input type="text" id="videoUrl" placeholder="Tempel URL di sini...">
+  <button onclick="processLink()">Proses Link</button>
+  <p id="status"></p>
+</div>
+
+<script>
+  async function processLink() {
+    const url = document.getElementById('videoUrl').value;
+    const status = document.getElementById('status');
+    
+    if (!url) {
+      status.innerText = "Masukkan URL terlebih dahulu!";
+      return;
+    }
+
+    status.innerText = "Memproses...";
+  }
+</script>
+
+</body>
+</html>
