@@ -9,7 +9,7 @@
     .card { background: white; padding: 2rem; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); width: 90%; max-width: 400px; text-align: center; }
     input { width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box; font-size: 14px; }
     button, .download-btn { display: inline-block; padding: 12px 20px; background: #fe2c55; color: white; border: none; border-radius: 5px; cursor: pointer; font-weight: bold; width: 100%; text-decoration: none; box-sizing: border-box; margin-top: 10px; font-size: 15px; }
-    button:hover, .download-btn:hover { background: #e02648; }
+    button:hover { background: #e02648; }
     .download-btn { background: #25d366; }
     .download-btn:hover { background: #1eb857; }
     #status { margin-top: 15px; font-size: 14px; color: #333; word-break: break-word; }
@@ -18,7 +18,7 @@
 <body>
 
 <div class="card">
-  <h2>TikTok Downloader</h2>
+  <h2>TikTok Downloader v2</h2>
   <input type="text" id="videoUrl" placeholder="Tempel URL TikTok di sini...">
   <button onclick="processLink()">Proses Link</button>
   <div id="status"></div>
@@ -37,24 +37,37 @@
     status.innerText = "Sedang mengambil data video...";
 
     try {
-      // Panggilan langsung ke API TikWM dari browser HP
-      const response = await fetch(`https://www.tikwm.com/api/?url=${encodeURIComponent(urlInput)}&hd=1`);
-      const data = await response.json();
-      
+      // API Utama: TikWM
+      let res = await fetch(`https://www.tikwm.com/api/?url=${encodeURIComponent(urlInput)}&hd=1`);
+      let data = await res.json();
+
       if (data && data.code === 0 && data.data) {
-        const videoData = data.data;
-        const downloadUrl = videoData.hdplay || videoData.play;
-        
-        status.innerHTML = `
-          <p><b>${videoData.title || 'TikTok Video'}</b></p>
-          <a href="${downloadUrl}" target="_blank" download class="download-btn">Download Video (No WM)</a>
-        `;
-      } else {
-        status.innerText = "Gagal: " + (data.msg || "Video tidak ditemukan atau link tidak valid.");
+        showResult(data.data.title, data.data.hdplay || data.data.play);
+        return;
       }
+
+      // API Alternatif 1: LoFi API
+      status.innerText = "Mencoba server cadangan 1...";
+      res = await fetch(`https://api.tiklydown.eu.org/api/download?url=${encodeURIComponent(urlInput)}`);
+      data = await res.json();
+
+      if (data && data.video && data.video.noWatermark) {
+        showResult(data.title || 'TikTok Video', data.video.noWatermark);
+        return;
+      }
+
+      status.innerText = "Gagal: Video tidak ditemukan atau link tidak valid.";
     } catch (error) {
-      status.innerText = "Gagal terhubung ke layanan pengunduh.";
+      status.innerText = "Terjadi kesalahan jaringan / koneksi.";
     }
+  }
+
+  function showResult(title, downloadUrl) {
+    const status = document.getElementById('status');
+    status.innerHTML = `
+      <p><b>${title || 'TikTok Video'}</b></p>
+      <a href="${downloadUrl}" target="_blank" download class="download-btn">Download Video (No WM)</a>
+    `;
   }
 </script>
 
