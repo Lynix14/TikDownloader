@@ -1,9 +1,9 @@
-<!DOCTYPE html>
+      <!DOCTYPE html>
 <html lang="id">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>TikTok Downloader v3</title>
+  <title>TikTok Downloader</title>
   <style>
     body { font-family: Arial, sans-serif; display: flex; justify-content: center; align-items: center; min-height: 100vh; background: #f4f4f9; margin: 0; }
     .card { background: white; padding: 2rem; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); width: 90%; max-width: 400px; text-align: center; }
@@ -18,7 +18,7 @@
 <body>
 
 <div class="card">
-  <h2>TikTok Downloader v3</h2>
+  <h2>TikTok Downloader</h2>
   <input type="text" id="videoUrl" placeholder="Tempel URL TikTok di sini...">
   <button onclick="processLink()">Proses Link</button>
   <div id="status"></div>
@@ -69,7 +69,6 @@
       <button class="download-btn" id="btnDownload">Download Video Langsung</button>
     `;
 
-    // Event handler agar file langsung terunduh sebagai file mp4
     document.getElementById('btnDownload').onclick = function() {
       downloadDirectly(downloadUrl, (title || 'tiktok_video') + '.mp4');
     };
@@ -100,7 +99,6 @@
       const dlMsg = document.getElementById('dl-msg');
       if (dlMsg) dlMsg.innerText = "Download selesai!";
     } catch (err) {
-      // Jika CORS melarang blob fetch direct, fallback buka tab langsung
       window.open(fileUrl, '_blank');
     }
   }
