@@ -1,9 +1,15 @@
-      <!DOCTYPE html>
+          <!DOCTYPE html>
 <html lang="id">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>TikTok Downloader</title>
+  
+  <!-- TAG SEO UTAMA -->
+  <title>TikDownloader - Download Video TikTok Tanpa Watermark HD</title>
+  <meta name="description" content="Download video TikTok tanpa watermark secara gratis, cepat, dan kualitas HD. Cukup tempel link TikTok dan unduh langsung ke galeri HP.">
+  <meta name="keywords" content="tiktok downloader, download video tiktok, tiktok no watermark, unduh tiktok no wm">
+  <meta name="robots" content="index, follow">
+
   <style>
     body { font-family: Arial, sans-serif; display: flex; justify-content: center; align-items: center; min-height: 100vh; background: #f4f4f9; margin: 0; }
     .card { background: white; padding: 2rem; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); width: 90%; max-width: 400px; text-align: center; }
@@ -46,7 +52,7 @@
         return;
       }
 
-      // API Alternatif 1: Tiklydown
+      // API Alternatif: Tiklydown
       status.innerText = "Mencoba server cadangan...";
       res = await fetch(`https://api.tiklydown.eu.org/api/download?url=${encodeURIComponent(urlInput)}`);
       data = await res.json();
