@@ -35,7 +35,7 @@
     status.innerText = "Memproses...";
 
     try {
-      const response = await fetch('https://SERVER-BACKEND-KAMU.onrender.com/api/process-media', {
+      const response = await fetch('https://tik-downloader-three.vercel.app/api/process-media', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ fileUrl: url })
