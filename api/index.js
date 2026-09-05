@@ -1,6 +1,5 @@
 const express = require('express');
 const cors = require('cors');
-const { Tiktok } = require('@tobyg74/tiktok-api-dl');
 
 const app = express();
 app.use(cors());
@@ -18,24 +17,26 @@ app.post('/api/process-media', async (req, res) => {
     }
 
     try {
-        const result = await Tiktok(fileUrl, { version: 'v1' });
+        // Menggunakan API publik TikWM yang mendukung link vt.tiktok.com
+        const response = await fetch(`https://www.tikwm.com/api/?url=${encodeURIComponent(fileUrl)}`);
+        const data = await response.json();
 
-        if (result.status === 'success' && result.result) {
-            const videoData = result.result;
+        if (data.code === 0 && data.data) {
+            const videoData = data.data;
             // Ambil URL video tanpa watermark
-            const downloadUrl = videoData.video1 || videoData.video2 || videoData.play;
+            const downloadUrl = videoData.play;
 
             return res.json({
                 success: true,
                 message: 'Video berhasil ditemukan!',
                 downloadUrl: downloadUrl,
-                title: videoData.description || 'TikTok Video'
+                title: videoData.title || 'TikTok Video'
             });
         } else {
-            return res.status(400).json({ error: 'Gagal mengambil data video TikTok.' });
+            return res.status(400).json({ error: data.msg || 'Gagal mengambil data video TikTok.' });
         }
     } catch (error) {
-        return res.status(500).json({ error: 'Terjadi kesalahan pada server.' });
+        return res.status(500).json({ error: 'Terjadi kesalahan pada server backend.' });
     }
 });
 
