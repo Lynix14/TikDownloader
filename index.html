@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>TikTok Downloader</title>
+  <title>TikTok Downloader v3</title>
   <style>
     body { font-family: Arial, sans-serif; display: flex; justify-content: center; align-items: center; min-height: 100vh; background: #f4f4f9; margin: 0; }
     .card { background: white; padding: 2rem; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); width: 90%; max-width: 400px; text-align: center; }
@@ -18,7 +18,7 @@
 <body>
 
 <div class="card">
-  <h2>TikTok Downloader v2</h2>
+  <h2>TikTok Downloader v3</h2>
   <input type="text" id="videoUrl" placeholder="Tempel URL TikTok di sini...">
   <button onclick="processLink()">Proses Link</button>
   <div id="status"></div>
@@ -46,8 +46,8 @@
         return;
       }
 
-      // API Alternatif 1: LoFi API
-      status.innerText = "Mencoba server cadangan 1...";
+      // API Alternatif 1: Tiklydown
+      status.innerText = "Mencoba server cadangan...";
       res = await fetch(`https://api.tiklydown.eu.org/api/download?url=${encodeURIComponent(urlInput)}`);
       data = await res.json();
 
@@ -66,8 +66,43 @@
     const status = document.getElementById('status');
     status.innerHTML = `
       <p><b>${title || 'TikTok Video'}</b></p>
-      <a href="${downloadUrl}" target="_blank" download class="download-btn">Download Video (No WM)</a>
+      <button class="download-btn" id="btnDownload">Download Video Langsung</button>
     `;
+
+    // Event handler agar file langsung terunduh sebagai file mp4
+    document.getElementById('btnDownload').onclick = function() {
+      downloadDirectly(downloadUrl, (title || 'tiktok_video') + '.mp4');
+    };
+  }
+
+  async function downloadDirectly(fileUrl, fileName) {
+    const status = document.getElementById('status');
+    const cleanFileName = fileName.replace(/[^a-zA-Z0-9.\-_]/g, '_');
+    
+    status.innerHTML += `<p style="font-size:12px; color:#666;" id="dl-msg">Mengunduh file ke perangkat...</p>`;
+
+    try {
+      const response = await fetch(fileUrl);
+      const blob = await response.blob();
+      
+      const blobUrl = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.style.display = 'none';
+      a.href = blobUrl;
+      a.download = cleanFileName;
+      
+      document.body.appendChild(a);
+      a.click();
+      
+      window.URL.revokeObjectURL(blobUrl);
+      document.body.removeChild(a);
+
+      const dlMsg = document.getElementById('dl-msg');
+      if (dlMsg) dlMsg.innerText = "Download selesai!";
+    } catch (err) {
+      // Jika CORS melarang blob fetch direct, fallback buka tab langsung
+      window.open(fileUrl, '_blank');
+    }
   }
 </script>
 
